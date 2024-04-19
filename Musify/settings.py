@@ -22,11 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-3&og=*yz#nb&103vt-xhzdopmf+3+us(^l9-rq^9g9iyvau54('
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
 
 
 
@@ -83,6 +84,7 @@ WSGI_APPLICATION = 'Musify.wsgi.application'
 
 # Database - SUPABASE
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+database_url = os.environ.get("DATABASE_URL")
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -93,6 +95,8 @@ DATABASES = {
         'PORT': '5432',  # The default PostgreSQL port
     }
 }
+
+DATABASES['default'] = dj_database_url.parse(database_url)
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
